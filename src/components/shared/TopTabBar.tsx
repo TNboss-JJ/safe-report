@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Map, Megaphone, Trophy, Wrench, Newspaper, Baby } from 'lucide-react'
 
-const NAV_ITEMS = [
+const TABS = [
   { href: '/',          label: '지도',    Icon: Map },
   { href: '/community', label: '커뮤니티', Icon: Megaphone },
   { href: '/ranking',   label: '랭킹',    Icon: Trophy },
@@ -13,29 +13,26 @@ const NAV_ITEMS = [
   { href: '/kids',      label: '어린이',  Icon: Baby },
 ] as const
 
-export default function BottomNav() {
+export default function TopTabBar() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 grid pb-[env(safe-area-inset-bottom)]"
-      style={{
-        gridTemplateColumns: 'repeat(6,1fr)',
-        height: 'var(--nav-h)',
-        background: 'var(--white)',
-        borderTop: '1.5px solid var(--border)',
-        boxShadow: '0 -4px 20px rgba(5,46,22,0.08)',
-      }}>
-      {NAV_ITEMS.map(({ href, label, Icon }) => {
+    <div className="sticky z-40 flex overflow-x-auto scrollbar-hide px-1"
+      style={{ top: '54px', background: 'var(--p800)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+      {TABS.map(({ href, label, Icon }) => {
         const active = pathname === href || (href !== '/' && pathname.startsWith(href))
         return (
           <Link key={href} href={href}
-            className="flex flex-col items-center justify-center gap-0.5 text-[9.5px] font-bold transition-colors"
-            style={{ color: active ? 'var(--p700)' : 'var(--text3)' }}>
-            <Icon size={22} />
+            className="shrink-0 flex items-center gap-1.5 px-3 py-2.5 text-[12px] font-bold whitespace-nowrap border-b-2 transition-all"
+            style={{
+              color: active ? 'var(--p400)' : 'rgba(255,255,255,0.45)',
+              borderBottomColor: active ? 'var(--p400)' : 'transparent',
+            }}>
+            <Icon size={14} />
             {label}
           </Link>
         )
       })}
-    </nav>
+    </div>
   )
 }

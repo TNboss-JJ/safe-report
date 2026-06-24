@@ -1,5 +1,4 @@
-import MapView from './MapView'
-
+import { redirect } from 'next/navigation'
 export default function MapPage() {
-  return <MapView />
+  redirect('/')
 }

@@ -1,45 +1,41 @@
 import { EMERGENCY_CONTACTS } from '@/constants'
 import { Siren, Phone, ShieldAlert } from 'lucide-react'
 
-const CONTACT_COLORS: Record<string, string> = {
-  danger: 'bg-red-500 text-white',
-  safe:   'bg-green-600 text-white',
-  blue:   'bg-blue-600 text-white',
-  purple: 'bg-purple-600 text-white',
-}
-
 export default function SosPage() {
   return (
-    <div className="max-w-lg mx-auto px-4 py-6 space-y-5">
-
-      <div className="bg-[#dc2626] rounded-2xl p-5 text-white text-center">
+    <div className="max-w-lg mx-auto px-4 py-5 space-y-4">
+      <div className="rounded-2xl p-5 text-white text-center"
+        style={{ background: 'var(--danger)', boxShadow: '0 6px 24px rgba(220,38,38,0.4)' }}>
         <Siren size={40} className="mx-auto mb-2" />
-        <h1 className="text-xl font-bold mb-1">긴급 신고</h1>
-        <p className="text-sm text-red-200">아래 번호를 눌러 즉시 연결하세요</p>
+        <div className="text-[52px] font-black leading-none mb-1">112</div>
+        <p className="text-[13px] opacity-85 mb-4">지금 위험하다면 즉시 경찰에 신고하세요</p>
+        <a href="tel:112"
+          className="inline-flex items-center gap-2 bg-white rounded-xl px-7 py-3 text-[16px] font-black"
+          style={{ color: 'var(--danger)' }}>
+          <Phone size={18} /> 112 바로 전화
+        </a>
       </div>
 
-      <div className="space-y-3">
-        {EMERGENCY_CONTACTS.map((c) => (
-          <a
-            key={c.number}
-            href={`tel:${c.number}`}
-            className="flex items-center gap-4 bg-white rounded-2xl px-5 py-4 shadow-sm border border-green-100 active:scale-[0.98] transition-transform"
-          >
-            <span className={`w-16 text-center text-xl font-black rounded-xl py-2 ${CONTACT_COLORS[c.color] ?? 'bg-gray-500 text-white'}`}>
-              {c.number}
-            </span>
-            <div className="flex-1">
-              <p className="font-bold text-gray-900">{c.name}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{c.desc}</p>
+      <div className="rounded-2xl overflow-hidden border shadow-sm" style={{ borderColor: 'var(--border)' }}>
+        {EMERGENCY_CONTACTS.map((c, i) => (
+          <a key={c.number} href={`tel:${c.number}`}
+            className="flex items-center gap-4 px-4 py-4 bg-white transition-colors hover:bg-gray-50"
+            style={{ borderBottom: i < EMERGENCY_CONTACTS.length - 1 ? '1px solid var(--border)' : 'none' }}>
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'var(--p50)', color: 'var(--p700)' }}>
+              <Phone size={20} />
             </div>
-            <Phone size={20} className="text-gray-400 shrink-0" />
+            <div className="flex-1">
+              <div className="font-black text-[14.5px]" style={{ color: 'var(--text)' }}>{c.name}</div>
+              <div className="text-[12.5px] mt-0.5" style={{ color: 'var(--text3)' }}>{c.desc}</div>
+            </div>
+            <span className="text-[20px] font-black" style={{ color: 'var(--p600)' }}>{c.number}</span>
           </a>
         ))}
       </div>
 
-      <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 flex gap-3">
-        <ShieldAlert size={20} className="text-yellow-600 shrink-0 mt-0.5" />
-        <p className="text-xs text-yellow-800">
+      <div className="rounded-2xl p-4 flex gap-3" style={{ background: 'var(--warn-bg)', border: '1px solid #fde68a' }}>
+        <ShieldAlert size={20} className="shrink-0 mt-0.5" style={{ color: 'var(--warn)' }} />
+        <p className="text-[12.5px] leading-relaxed" style={{ color: '#92400e' }}>
           <strong>생명이 위험한 상황</strong>이라면 112 또는 119로 즉시 신고하세요.<br />
           위치는 자동으로 전송됩니다.
         </p>

@@ -1,35 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f0fdf4;
-  --foreground: #171717;
-  --color-p900: #052e16;
-  --color-p800: #14532d;
-  --color-p700: #15803d;
-  --color-p600: #16a34a;
-  --color-p500: #22c55e;
-  --color-p300: #86efac;
-  --color-p100: #dcfce7;
-  --color-p50: #f0fdf4;
-  --color-danger: #dc2626;
-  --color-warn: #d97706;
+  --bg:        #f0fdf4;
+  --bg2:       #dcfce7;
+  --white:     #ffffff;
+  --p900:      #052e16;
+  --p800:      #14532d;
+  --p700:      #15803d;
+  --p600:      #16a34a;
+  --p500:      #22c55e;
+  --p400:      #4ade80;
+  --p300:      #86efac;
+  --p100:      #dcfce7;
+  --p50:       #f0fdf4;
+  --danger:    #dc2626;
+  --danger-bg: #fef2f2;
+  --warn:      #d97706;
+  --warn-bg:   #fffbeb;
+  --text:      #052e16;
+  --text2:     #166534;
+  --text3:     #6b7280;
+  --border:    #bbf7d0;
+  --shadow:    0 2px 14px rgba(5,46,22,0.08);
+  --shadow-lg: 0 8px 32px rgba(5,46,22,0.14);
+  --nav-h:     64px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: -apple-system, 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
 }
-
-/* 모바일 탭바 영역 확보 */
-.pb-safe {
-  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
-}
+.pb-nav { padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom)); }
