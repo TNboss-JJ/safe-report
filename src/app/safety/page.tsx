@@ -1,9 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Camera, Car, MapPin, Share2, Route, Shield, Search, ChevronRight } from 'lucide-react'
+import { Camera, Car, MapPin, Share2, Route, Shield, Search, ChevronRight, ExternalLink } from 'lucide-react'
 
-const TOOLS = [
+type ToolId = 'cctv' | 'taxi' | 'location' | 'sns' | 'routine' | 'guide'
+
+const TOOLS: { id: ToolId; label: string; Icon: React.ComponentType<{ size?: number }> }[] = [
   { id: 'cctv',     label: 'CCTV',    Icon: Camera },
   { id: 'taxi',     label: '택시',    Icon: Car },
   { id: 'location', label: '위치공유', Icon: MapPin },
@@ -35,6 +37,30 @@ const GUIDES = [
   },
 ]
 
+const TOOL_ACTIONS: Record<ToolId, () => void> = {
+  cctv:     () => alert('CCTV 위치 확인 기능은 준비 중입니다.'),
+  taxi:     () => window.open('https://www.taxi114.or.kr', '_blank'),
+  location: () => {
+    if (navigator.share) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        navigator.share({ title: '내 위치 공유', text: `내 위치: https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}` })
+      }, () => alert('위치 권한을 허용해주세요'))
+    } else {
+      alert('위치 공유는 모바일에서 지원됩니다.')
+    }
+  },
+  sns:      () => window.open('https://www.privacy.go.kr', '_blank'),
+  routine:  () => alert('루틴 경로 설정 기능은 준비 중입니다.'),
+  guide:    () => document.getElementById('guide-section')?.scrollIntoView({ behavior: 'smooth' }),
+}
+
+const FACILITY_LINKS = [
+  { label: 'CCTV 위치', sub: '내 주변 방범 CCTV', Icon: Camera, bg: '#eff6ff', color: '#1d4ed8', url: 'https://www.safemap.go.kr' },
+  { label: '안전 비상벨', sub: '가장 가까운 비상벨', Icon: MapPin, bg: 'var(--p50)', color: 'var(--p700)', url: 'https://www.safemap.go.kr' },
+  { label: '여성안심택배함', sub: '안전한 택배 수령', Icon: Search, bg: '#f3e8ff', color: '#7c3aed', url: 'https://www.mogef.go.kr' },
+  { label: '경찰서·파출소', sub: '주변 치안 시설', Icon: Shield, bg: 'var(--warn-bg)', color: 'var(--warn)', url: 'https://www.police.go.kr/www/open/find/station/mapForm.jsp' },
+]
+
 export default function SafetyPage() {
   const [open, setOpen] = useState<number | null>(null)
 
@@ -46,10 +72,12 @@ export default function SafetyPage() {
         <p className="text-[12.5px] leading-relaxed opacity-70">CCTV 확인부터 택시번호 조회, 실시간 위치 공유까지</p>
       </div>
 
-      {/* 필터 */}
+      {/* 도구 필터 */}
       <div className="flex gap-2 px-4 py-3 overflow-x-auto scrollbar-hide">
         {TOOLS.map(({ id, label, Icon }) => (
-          <button key={id} className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-bold border transition-all"
+          <button key={id}
+            onClick={TOOL_ACTIONS[id]}
+            className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-bold border transition-all active:scale-95"
             style={{ background: 'var(--white)', color: 'var(--text3)', borderColor: 'var(--border)' }}>
             <Icon size={12} /> {label}
           </button>
@@ -57,16 +85,13 @@ export default function SafetyPage() {
       </div>
 
       {/* 대처법 가이드 */}
-      <p className="px-4 text-[10.5px] font-black tracking-widest uppercase flex items-center gap-1.5 mb-2" style={{ color: 'var(--p600)' }}>
+      <p id="guide-section" className="px-4 text-[10.5px] font-black tracking-widest uppercase flex items-center gap-1.5 mb-2" style={{ color: 'var(--p600)' }}>
         <Shield size={13} /> 상황별 대처법
       </p>
       <div className="px-4 space-y-2 mb-4">
         {GUIDES.map((g, i) => (
           <div key={i} className="bg-white rounded-2xl shadow-sm border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-            <button
-              className="w-full flex items-center gap-3 p-4 text-left"
-              onClick={() => setOpen(open === i ? null : i)}
-            >
+            <button className="w-full flex items-center gap-3 p-4 text-left" onClick={() => setOpen(open === i ? null : i)}>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'var(--p50)', color: 'var(--p700)' }}>
                 <g.Icon size={20} />
               </div>
@@ -93,25 +118,24 @@ export default function SafetyPage() {
         ))}
       </div>
 
-      {/* 안전시설 링크 */}
+      {/* 안전시설 */}
       <p className="px-4 text-[10.5px] font-black tracking-widest uppercase flex items-center gap-1.5 mb-2" style={{ color: 'var(--p600)' }}>
         <Camera size={13} /> 안전 시설 확인
       </p>
       <div className="px-4 grid grid-cols-2 gap-2.5 mb-4">
-        {[
-          { label: 'CCTV 위치', sub: '내 주변 방범 CCTV', Icon: Camera, bg: '#eff6ff', color: '#1d4ed8' },
-          { label: '안전 비상벨', sub: '가장 가까운 비상벨', Icon: MapPin, bg: 'var(--p50)', color: 'var(--p700)' },
-          { label: '여성안심택배함', sub: '안전한 택배 수령', Icon: Search, bg: '#f3e8ff', color: '#7c3aed' },
-          { label: '경찰서·파출소', sub: '주변 치안 시설', Icon: Shield, bg: 'var(--warn-bg)', color: 'var(--warn)' },
-        ].map((item) => (
-          <div key={item.label} className="rounded-2xl p-4 flex flex-col gap-3 border cursor-pointer shadow-sm"
-            style={{ background: item.bg, borderColor: 'transparent' }}>
-            <item.Icon size={24} style={{ color: item.color }} />
+        {FACILITY_LINKS.map((item) => (
+          <a key={item.label} href={item.url} target="_blank" rel="noopener noreferrer"
+            className="rounded-2xl p-4 flex flex-col gap-3 border cursor-pointer shadow-sm active:scale-95 transition-transform"
+            style={{ background: item.bg, borderColor: 'transparent', textDecoration: 'none' }}>
+            <div className="flex items-start justify-between">
+              <item.Icon size={24} style={{ color: item.color }} />
+              <ExternalLink size={12} style={{ color: item.color, opacity: 0.6 }} />
+            </div>
             <div>
               <p className="font-bold text-[13px]" style={{ color: 'var(--text)' }}>{item.label}</p>
               <p className="text-[11px] mt-0.5" style={{ color: 'var(--text3)' }}>{item.sub}</p>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>

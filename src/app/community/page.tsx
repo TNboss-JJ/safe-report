@@ -39,10 +39,11 @@ export default function CommunityPage() {
             style={{ borderColor: 'var(--border)', background: 'var(--white)', color: 'var(--text)' }}>
             <Megaphone size={16} /> 제보하기
           </Link>
-          <button className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-[13.5px] text-white"
+          <Link href="/community/new"
+            className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-[13.5px] text-white"
             style={{ background: 'var(--p600)' }}>
             <MessageCircle size={16} /> 글쓰기
-          </button>
+          </Link>
         </div>
       </div>
 
