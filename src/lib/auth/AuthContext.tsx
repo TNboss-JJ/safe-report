@@ -8,13 +8,14 @@ type AuthCtx = {
   user: User | null
   session: Session | null
   signInWithKakao: () => Promise<void>
-  signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>
-  signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null }>
+  signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
   loading: boolean
 }
 
 const AuthContext = createContext<AuthCtx>({} as AuthCtx)
+
+
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -46,14 +47,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
   }
 
-  async function signInWithEmail(email: string, password: string) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error: error?.message ?? null }
-  }
-
-  async function signUpWithEmail(email: string, password: string) {
-    const { error } = await supabase.auth.signUp({ email, password })
-    return { error: error?.message ?? null }
+  async function signInWithGoogle() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${location.origin}/auth/callback` },
+    })
   }
 
   async function signOut() {
@@ -61,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, signInWithKakao, signInWithEmail, signUpWithEmail, signOut, loading }}>
+    <AuthContext.Provider value={{ user, session, signInWithKakao, signInWithGoogle, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   )
