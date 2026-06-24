@@ -5,37 +5,37 @@ const NEWS = [
     source: '연합뉴스',
     date: '2024.06.18',
     tag: '검거',
-    tagStyle: { backgroundColor: '#fef2f2', color: '#dc2626' },
+    tagStyle: { background: '#fef2f2', color: '#dc2626' },
     title: '경찰, 필리핀 원정 성매매 인신매매 조직 검거… 피해자 12명 구출',
     body: '국제 인신매매 조직이 취업 광고로 피해자 모집 후 필리핀으로 송출, 감금·착취. 주범 포함 7명 구속.',
-    url: 'https://www.yna.co.kr',
+    url: 'https://www.yna.co.kr/search/index?query=%EC%9D%B8%EC%8B%A0%EB%A7%A4%EB%A7%A4+%EA%B2%80%EA%B1%B0',
   },
   {
     source: 'KBS 뉴스',
     date: '2024.05.30',
     tag: '수사',
-    tagStyle: { backgroundColor: '#eff6ff', color: '#1d4ed8' },
+    tagStyle: { background: '#eff6ff', color: '#1d4ed8' },
     title: '인천경찰청, 보이스피싱 콜센터 총책 검거… 피해액 120억 원',
     body: '중국 기반 콜센터 운영 조직 총책 등 14명 검거. 금감원·검찰 사칭 수법으로 2년간 피해.',
-    url: 'https://news.kbs.co.kr',
+    url: 'https://news.kbs.co.kr/news/search.do?query=%EB%B3%B4%EC%9D%B4%EC%8A%A4%ED%94%BC%EC%8B%B1+%EC%B4%9D%EC%B1%85+%EA%B2%80%EA%B1%B0',
   },
   {
     source: 'MBC 뉴스데스크',
     date: '2024.04.12',
     tag: '경고',
-    tagStyle: { backgroundColor: '#fffbeb', color: '#d97706' },
+    tagStyle: { background: '#fffbeb', color: '#d97706' },
     title: '대낮 서울 강남구 취업 미끼 납치 미수… CCTV에 포착',
     body: '20대 여성 대상 모델 에이전시 명함 수법 접근, 강제로 차량 탑승 시도. 피해자 소리 질러 도주.',
-    url: 'https://imnews.imbc.com',
+    url: 'https://imnews.imbc.com/search?query=%EC%B7%A8%EC%97%85+%EB%AF%B8%EB%81%BC+%EB%82%A9%EC%B9%98',
   },
   {
     source: '경향신문',
     date: '2024.03.22',
     tag: '현황',
-    tagStyle: { backgroundColor: '#f0fdf4', color: '#15803d' },
+    tagStyle: { background: '#f0fdf4', color: '#15803d' },
     title: '2023년 인신매매 신고 건수 역대 최다… 온라인 범죄 급증',
     body: '경찰청 발표, 전년 대비 38% 증가. SNS 채용 미끼형이 전체의 62% 차지.',
-    url: 'https://www.khan.co.kr',
+    url: 'https://www.khan.co.kr/search/search.html?query=%EC%9D%B8%EC%8B%A0%EB%A7%A4%EB%A7%A4+%EC%B5%9C%EB%8B%A4',
   },
 ]
 
@@ -47,8 +47,8 @@ const VERDICTS = [
     title: '인신매매·감금·강제추행 혐의 피고인 3인 상고심',
     summary: '피고인들이 피해자 4명을 허위 취업광고로 유인, 강금 및 성 착취. 원심 형량 유지.',
     sentence: '징역 15년 확정 (원심 유지)',
-    sentenceStyle: { backgroundColor: '#fef2f2', color: '#dc2626' },
-    src: 'https://www.scourt.go.kr',
+    sentenceStyle: { background: '#fef2f2', color: '#dc2626' },
+    src: 'https://www.law.go.kr/LSW/precInfoP.do?mode=0&precSeq=0&precSort=1&query=%EC%9D%B8%EC%8B%A0%EB%A7%A4%EB%A7%A4',
   },
   {
     court: '서울고등법원',
@@ -57,8 +57,8 @@ const VERDICTS = [
     title: '보이스피싱 총책 특수사기·전자금융거래법위반 항소심',
     summary: '피고인 총 피해 94억 원 규모 보이스피싱 조직 운영. 1심보다 형량 가중.',
     sentence: '징역 12년 (1심 10년 → 가중)',
-    sentenceStyle: { backgroundColor: '#fffbeb', color: '#d97706' },
-    src: 'https://www.scourt.go.kr',
+    sentenceStyle: { background: '#fffbeb', color: '#d97706' },
+    src: 'https://www.law.go.kr/LSW/precInfoP.do?mode=0&precSeq=0&precSort=1&query=%EB%B3%B4%EC%9D%B4%EC%8A%A4%ED%94%BC%EC%8B%B1',
   },
   {
     court: '수원지방법원',
@@ -67,18 +67,18 @@ const VERDICTS = [
     title: '아동·청소년 성착취물 제작·배포 및 협박 피고인 1심',
     summary: 'SNS 통해 미성년자 접근 후 성착취물 제작, 유포 협박. 전자발찌 부착 명령 병과.',
     sentence: '징역 8년 · 전자발찌 10년',
-    sentenceStyle: { backgroundColor: '#fef2f2', color: '#dc2626' },
-    src: 'https://www.scourt.go.kr',
+    sentenceStyle: { background: '#fef2f2', color: '#dc2626' },
+    src: 'https://www.law.go.kr/LSW/precInfoP.do?mode=0&precSeq=0&precSort=1&query=%EC%84%B1%EC%B0%A9%EC%B7%A8%EB%AC%BC',
   },
   {
     court: '부산지방법원',
     caseNo: '2023고합 388',
     date: '2023.07.20',
     title: '야간 미행·강제 차량 납치 미수 피의자 1심',
-    summary: '귀가 중인 20대 여성을 200m 이상 미행 후 차량으로 강제 납치 시도. 범행 부인했으나 CCTV 증거.',
+    summary: '귀가 중인 20대 여성을 200m 이상 미행 후 차량으로 강제 납치 시도.',
     sentence: '징역 5년 (집행유예 불인정)',
-    sentenceStyle: { backgroundColor: '#fffbeb', color: '#d97706' },
-    src: 'https://www.scourt.go.kr',
+    sentenceStyle: { background: '#fffbeb', color: '#d97706' },
+    src: 'https://www.law.go.kr/LSW/precInfoP.do?mode=0&precSeq=0&precSort=1&query=%EB%82%A9%EC%B9%98+%EB%AF%B8%EC%88%98',
   },
 ]
 
@@ -112,7 +112,7 @@ export default function NewsPage() {
               <p className="text-[14px] font-black leading-snug mb-1.5" style={{ color: 'var(--text)' }}>{n.title}</p>
               <p className="text-[12.5px] leading-relaxed line-clamp-2 mb-2" style={{ color: 'var(--text3)' }}>{n.body}</p>
               <div className="flex items-center gap-1 text-[11.5px]" style={{ color: 'var(--p600)' }}>
-                <ExternalLink size={11} /> 원문 보기
+                <ExternalLink size={11} /> 원문 검색 보기
               </div>
             </div>
           </a>
@@ -138,7 +138,7 @@ export default function NewsPage() {
                 <Lock size={12} /> {v.sentence}
               </span>
               <span className="text-[11px] flex items-center gap-1" style={{ color: 'var(--p600)' }}>
-                <ExternalLink size={11} /> 판결문
+                <ExternalLink size={11} /> 판례 검색
               </span>
             </div>
           </a>

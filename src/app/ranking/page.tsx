@@ -1,3 +1,5 @@
+'use client'
+
 import { Trophy, Flame, Share2 } from 'lucide-react'
 
 const PODIUM = [
@@ -17,6 +19,16 @@ const PT_LIST = [
 const RANK_BG = ['var(--p600)', '#e5e7eb', '#fde68a', 'var(--bg)', 'var(--bg)']
 const RANK_COLOR = ['white', 'var(--text)', '#78350f', 'var(--text3)', 'var(--text3)']
 
+async function handleShare() {
+  const text = '세이프리포트 제보 랭킹 — 이번 주 1위 송파구 393건!\n우리 동네 안전을 함께 만들어요 👇'
+  if (navigator.share) {
+    await navigator.share({ title: '세이프리포트 랭킹', text, url: 'https://safe-report-olive.vercel.app/ranking' })
+  } else {
+    await navigator.clipboard.writeText(`${text}\nhttps://safe-report-olive.vercel.app/ranking`)
+    alert('링크가 복사되었어요!')
+  }
+}
+
 export default function RankingPage() {
   return (
     <div className="max-w-lg mx-auto">
@@ -26,7 +38,8 @@ export default function RankingPage() {
         <p className="text-[13px] mb-4" style={{ color: 'var(--text3)' }}>지역별 참여 순위를 실시간으로 비교합니다.</p>
       </div>
 
-      <button className="mx-4 w-[calc(100%-32px)] flex items-center justify-center gap-2 py-3 rounded-xl border text-[14px] font-bold mb-4 shadow-sm"
+      <button onClick={handleShare}
+        className="mx-4 w-[calc(100%-32px)] flex items-center justify-center gap-2 py-3 rounded-xl border text-[14px] font-bold mb-4 shadow-sm"
         style={{ background: 'var(--white)', borderColor: 'var(--border)', color: 'var(--text)' }}>
         <Share2 size={16} /> 공유하기
       </button>
@@ -42,7 +55,7 @@ export default function RankingPage() {
         <div className="flex items-end gap-2">
           {PODIUM.map((p) => (
             <div key={p.rank}
-              className="flex-1 rounded-t-2xl flex flex-col items-center py-3 relative"
+              className="flex-1 rounded-t-2xl flex flex-col items-center py-3"
               style={{
                 background: p.rank === 1 ? 'var(--p600)' : p.rank === 2 ? '#f3f4f6' : '#fdf6e3',
                 paddingTop: p.rank === 1 ? '24px' : '14px',

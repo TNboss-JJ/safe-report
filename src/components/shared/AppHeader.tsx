@@ -1,11 +1,18 @@
 'use client'
 
 import Link from 'next/link'
-import { Bell, Gift, User, ShieldCheck } from 'lucide-react'
+import { Bell, Gift, ShieldCheck } from 'lucide-react'
 import { useAuth } from '@/lib/auth/AuthContext'
+import { useState } from 'react'
 
 export default function AppHeader() {
   const { user } = useAuth()
+  const [toast, setToast] = useState<string | null>(null)
+
+  function showToast(msg: string) {
+    setToast(msg)
+    setTimeout(() => setToast(null), 2500)
+  }
 
   return (
     <>
@@ -24,17 +31,22 @@ export default function AppHeader() {
           </div>
         </div>
         <div className="flex gap-1">
-          <button className="w-9 h-9 rounded-[10px] flex items-center justify-center relative" style={{ color: 'var(--p300)' }}>
+          <button onClick={() => showToast('알림 기능은 준비 중이에요 🔔')}
+            className="w-9 h-9 rounded-[10px] flex items-center justify-center relative" style={{ color: 'var(--p300)' }}>
             <Bell size={20} />
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
               style={{ background: 'var(--danger)', border: '1.5px solid var(--p800)' }} />
           </button>
-          <button className="w-9 h-9 rounded-[10px] flex items-center justify-center" style={{ color: 'var(--p300)' }}>
+          <Link href="/account"
+            className="w-9 h-9 rounded-[10px] flex items-center justify-center" style={{ color: 'var(--p300)' }}>
             <Gift size={20} />
-          </button>
-          <Link href="/account" className="w-9 h-9 rounded-[10px] flex items-center justify-center relative"
+          </Link>
+          <Link href="/account"
+            className="w-9 h-9 rounded-[10px] flex items-center justify-center relative"
             style={{ color: user ? 'var(--p400)' : 'var(--p300)' }}>
-            <User size={20} />
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>
             {user && (
               <span className="absolute bottom-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
                 style={{ background: 'var(--p500)', border: '1.5px solid var(--p800)' }} />
@@ -43,6 +55,7 @@ export default function AppHeader() {
         </div>
       </header>
 
+      {/* 티커 */}
       <div className="flex items-center gap-2 px-3 py-2 overflow-hidden" style={{ background: 'var(--p700)' }}>
         <span className="shrink-0 flex items-center gap-1 text-white text-[11px] font-bold px-2 py-0.5 rounded"
           style={{ background: 'rgba(255,255,255,0.15)' }}>
@@ -56,6 +69,14 @@ export default function AppHeader() {
           </span>
         </div>
       </div>
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed top-[70px] left-1/2 z-[200] -translate-x-1/2 px-4 py-2.5 rounded-xl text-white text-[13px] font-bold shadow-lg"
+          style={{ background: 'rgba(5,46,22,0.92)', backdropFilter: 'blur(6px)' }}>
+          {toast}
+        </div>
+      )}
     </>
   )
 }
