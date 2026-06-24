@@ -5,16 +5,27 @@ export const EMERGENCY_CONTACTS = [
   { name: '여성긴급전화', number: '1366', desc: '24시간 · 여성가족부', color: 'blue' },
   { name: '청소년 위기상담', number: '1388', desc: '24시간 · 여성가족부', color: 'safe' },
   { name: '소방·응급 구조', number: '119', desc: '신체적 위해·부상 시', color: 'danger' },
+  { name: '금융감독원', number: '1332', desc: '보이스피싱 신고 전용', color: 'purple' },
 ] as const
 
 // 제보 유형
 export const REPORT_TYPES = [
-  { id: 'kidnap_attempt', label: '납치 시도', icon: 'alert' },
-  { id: 'suspicious_vehicle', label: '의심 차량', icon: 'car' },
-  { id: 'stalking', label: '미행·감시', icon: 'eye' },
-  { id: 'job_bait', label: '취업 미끼', icon: 'chat' },
-  { id: 'danger_zone', label: '위험 장소', icon: 'location' },
-  { id: 'other', label: '기타 의심', icon: 'search' },
+  { id: 'kidnap_attempt',     label: '납치 시도',  icon: 'alert',    map: true  },
+  { id: 'suspicious_vehicle', label: '의심 차량',  icon: 'car',      map: true  },
+  { id: 'stalking',           label: '미행·감시',  icon: 'eye',      map: true  },
+  { id: 'job_bait',           label: '취업미끼',   icon: 'chat',     map: true  },
+  { id: 'danger_zone',        label: '위험 장소',  icon: 'location', map: true  },
+  { id: 'fire',               label: '화재·재난',  icon: 'flame',    map: true  },
+  { id: 'voice_phishing',     label: '보이스피싱', icon: 'phone',    map: false },
+  { id: 'other',              label: '기타 의심',  icon: 'search',   map: true  },
+] as const
+
+export const PHISHING_METHODS = [
+  { id: 'gov_impersonation', label: '기관사칭'     },
+  { id: 'loan_bait',         label: '대출빙자'     },
+  { id: 'delivery_bait',     label: '택배사칭'     },
+  { id: 'refund_bait',       label: '환급금'       },
+  { id: 'family_kidnap',     label: '가족납치빙자' },
 ] as const
 
 // 포인트 정책
@@ -45,4 +56,6 @@ export const COLORS = {
   p50: '#f0fdf4',
   danger: '#dc2626',
   warn: '#d97706',
+  fire:  '#ea580c',
+  phish: '#7c3aed',
 } as const

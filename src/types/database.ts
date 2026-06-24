@@ -4,6 +4,8 @@ export type ReportType =
   | 'stalking'
   | 'job_bait'
   | 'danger_zone'
+  | 'fire'
+  | 'voice_phishing'
   | 'other'
 
 export type RiskLevel = 'low' | 'medium' | 'high' | 'critical'

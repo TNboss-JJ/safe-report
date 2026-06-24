@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { REPORT_TYPES } from '@/constants'
+import { REPORT_TYPES, PHISHING_METHODS } from '@/constants'
 import type { ReportType, RiskLevel } from '@/types/database'
 
 const RISK_OPTIONS: { value: RiskLevel; label: string; color: string }[] = [
@@ -11,6 +11,8 @@ const RISK_OPTIONS: { value: RiskLevel; label: string; color: string }[] = [
   { value: 'high',     label: '위험 — 즉시 주의',   color: 'border-red-400 text-red-600' },
   { value: 'critical', label: '긴급 — 경찰 신고 권고', color: 'border-red-600 text-red-600' },
 ]
+
+const REGIONS = ['서울','부산','대구','인천','광주','대전','울산','세종','경기','강원','충북','충남','전북','전남','경북','경남','제주']
 
 export default function ReportForm() {
   const router = useRouter()
@@ -23,11 +25,26 @@ export default function ReportForm() {
     address: '',
     source_note: '',
     is_anonymous: true,
+    region: '',
+    phishing_method: [] as string[],
   })
 
   function set<K extends keyof typeof form>(key: K, value: typeof form[K]) {
     setForm((prev) => ({ ...prev, [key]: value }))
   }
+
+  function togglePhishingMethod(id: string) {
+    setForm((prev) => ({
+      ...prev,
+      phishing_method: prev.phishing_method.includes(id)
+        ? prev.phishing_method.filter((m) => m !== id)
+        : [...prev.phishing_method, id],
+    }))
+  }
+
+  const isPhishing = form.report_type === 'voice_phishing'
+  const selectedType = REPORT_TYPES.find((t) => t.id === form.report_type)
+  const isMapType = selectedType ? selectedType.map : true
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -35,10 +52,33 @@ export default function ReportForm() {
 
     setLoading(true)
     try {
+      const payload = isPhishing
+        ? {
+            report_type: form.report_type,
+            title: form.title,
+            body: form.body,
+            risk_level: form.risk_level,
+            source_note: form.source_note,
+            is_anonymous: form.is_anonymous,
+            location: null,
+            address: null,
+            region: form.region || null,
+            phishing_method: form.phishing_method,
+          }
+        : {
+            report_type: form.report_type,
+            title: form.title,
+            body: form.body,
+            risk_level: form.risk_level,
+            address: form.address,
+            source_note: form.source_note,
+            is_anonymous: form.is_anonymous,
+          }
+
       const res = await fetch('/api/reports', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       })
       if (res.ok) {
         const { id } = await res.json()
@@ -110,17 +150,57 @@ export default function ReportForm() {
         <p className="text-xs text-gray-400 mt-1 text-right">{form.body.length}/1000</p>
       </div>
 
-      {/* 위치 */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">위치</label>
-        <input
-          type="text"
-          value={form.address}
-          onChange={(e) => set('address', e.target.value)}
-          placeholder="예: 서울 마포구 망원동 초등학교 앞"
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#16a34a]"
-        />
-      </div>
+      {/* 위치 — map 유형: 주소 입력 / voice_phishing: 지역 드롭다운 */}
+      {isMapType && !isPhishing && (
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">위치</label>
+          <input
+            type="text"
+            value={form.address}
+            onChange={(e) => set('address', e.target.value)}
+            placeholder="예: 서울 마포구 망원동 초등학교 앞"
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#16a34a]"
+          />
+        </div>
+      )}
+
+      {isPhishing && (
+        <>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">피해 발생 지역</label>
+            <select
+              value={form.region}
+              onChange={(e) => set('region', e.target.value)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7c3aed] bg-white"
+            >
+              <option value="">지역 선택</option>
+              {REGIONS.map((r) => (
+                <option key={r} value={r}>{r}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">사기 수법 (복수 선택 가능)</label>
+            <div className="flex flex-wrap gap-2">
+              {PHISHING_METHODS.map((m) => (
+                <button
+                  type="button"
+                  key={m.id}
+                  onClick={() => togglePhishingMethod(m.id)}
+                  className={`text-sm px-3 py-1.5 rounded-full border font-medium transition-colors ${
+                    form.phishing_method.includes(m.id)
+                      ? 'bg-[#7c3aed] border-[#7c3aed] text-white'
+                      : 'border-gray-200 bg-white text-gray-600'
+                  }`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* 위험도 */}
       <div>
