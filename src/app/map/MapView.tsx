@@ -67,7 +67,7 @@ export default function MapView() {
   }
 
   return (
-    <div className="relative h-[calc(100vh-3.5rem-4rem)]">
+    <div className="relative" style={{ height: 'calc(100dvh - 54px - 36px - 42px - var(--nav-h))' }}>
       {/* 지도 */}
       <KakaoMap center={center} level={5} markers={markers} className="w-full h-full" />
 
