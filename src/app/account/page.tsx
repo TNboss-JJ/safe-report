@@ -34,6 +34,18 @@ function GoogleIcon() {
 export default function AccountPage() {
   const { user, signInWithKakao, signInWithGoogle, signOut } = useAuth()
   const [points, setPoints] = useState(0)
+  const [checkinDone, setCheckinDone] = useState(false)
+
+  async function handleCheckin() {
+    const res = await fetch('/api/checkin', { method: 'POST' })
+    if (res.ok) {
+      const data = await res.json()
+      setPoints(data.points)
+      setCheckinDone(true)
+    } else if (res.status === 409) {
+      setCheckinDone(true)
+    }
+  }
 
   useEffect(() => {
     if (!user) return
@@ -64,6 +76,13 @@ export default function AccountPage() {
               <p className="text-[12px]" style={{ color: 'var(--text3)' }}>{user.email}</p>
             </div>
           </div>
+          <button
+            onClick={handleCheckin}
+            disabled={checkinDone}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-bold border mb-3"
+            style={{ background: checkinDone ? 'var(--bg)' : 'var(--p600)', color: checkinDone ? 'var(--text3)' : 'white', borderColor: 'var(--border)' }}>
+            <Calendar size={16} /> {checkinDone ? '오늘 출석 완료!' : '출석 체크 +10P'}
+          </button>
           <button onClick={signOut}
             className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[14px] font-bold border"
             style={{ background: 'var(--white)', borderColor: 'var(--border)', color: 'var(--text3)' }}>
