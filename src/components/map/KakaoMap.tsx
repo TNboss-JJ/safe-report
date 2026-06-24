@@ -65,36 +65,39 @@ export default function KakaoMap({
 
   useEffect(() => {
     const key = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY
-    if (!key || !containerRef.current) return
-
-    // 스크립트 중복 삽입 방지
-    if (!document.getElementById('kakao-map-sdk')) {
-      const script = document.createElement('script')
-      script.id = 'kakao-map-sdk'
-      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&autoload=false`
-      script.async = true
-      document.head.appendChild(script)
-      script.onload = () => initMap()
-    } else if (window.kakao?.maps) {
-      initMap()
-    } else {
-      document.getElementById('kakao-map-sdk')!.addEventListener('load', initMap)
-    }
+    if (!key) { console.error('[KakaoMap] NEXT_PUBLIC_KAKAO_MAP_KEY 없음'); return }
+    if (!containerRef.current) return
 
     function initMap() {
-      window.kakao.maps.load(() => {
-        if (!containerRef.current) return
-        const latlng = new window.kakao.maps.LatLng(center.lat, center.lng)
-        mapRef.current = new window.kakao.maps.Map(containerRef.current, { center: latlng, level })
-
-        if (onMapClick) {
-          window.kakao.maps.event.addListener(mapRef.current, 'click', (...args: unknown[]) => {
-            const e = args[0] as { latLng: KakaoLatLng }
-            onMapClick(e.latLng.getLat(), e.latLng.getLng())
-          })
-        }
-      })
+      if (!containerRef.current || !window.kakao?.maps) return
+      const latlng = new window.kakao.maps.LatLng(center.lat, center.lng)
+      mapRef.current = new window.kakao.maps.Map(containerRef.current, { center: latlng, level })
+      if (onMapClick) {
+        window.kakao.maps.event.addListener(mapRef.current, 'click', (...args: unknown[]) => {
+          const e = args[0] as { latLng: KakaoLatLng }
+          onMapClick(e.latLng.getLat(), e.latLng.getLng())
+        })
+      }
     }
+
+    if (window.kakao?.maps) {
+      initMap()
+      return
+    }
+
+    const existing = document.getElementById('kakao-map-sdk')
+    if (existing) {
+      existing.addEventListener('load', initMap)
+      return
+    }
+
+    // autoload=false 제거 → SDK가 즉시 자동 초기화
+    const script = document.createElement('script')
+    script.id = 'kakao-map-sdk'
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${key}`
+    script.onload = initMap
+    script.onerror = () => console.error('[KakaoMap] SDK 로드 실패 — 도메인/키 확인')
+    document.head.appendChild(script)
 
     return () => {
       document.getElementById('kakao-map-sdk')?.removeEventListener('load', initMap)
