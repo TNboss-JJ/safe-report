@@ -1,9 +1,14 @@
+'use client'
+
+import Link from 'next/link'
 import { Bell, Gift, User, ShieldCheck } from 'lucide-react'
+import { useAuth } from '@/lib/auth/AuthContext'
 
 export default function AppHeader() {
+  const { user } = useAuth()
+
   return (
     <>
-      {/* 메인 헤더 */}
       <header className="sticky top-0 z-50 h-[54px] flex items-center justify-between px-4"
         style={{ background: 'var(--p800)', boxShadow: '0 2px 12px rgba(5,46,22,0.3)' }}>
         <div className="flex items-center gap-2.5">
@@ -19,26 +24,25 @@ export default function AppHeader() {
           </div>
         </div>
         <div className="flex gap-1">
-          {[
-            { Icon: Bell, label: '알림', dot: true },
-            { Icon: Gift, label: '혜택', dot: false },
-            { Icon: User, label: '계정', dot: false },
-          ].map(({ Icon, label, dot }) => (
-            <button key={label}
-              className="w-9 h-9 rounded-[10px] flex items-center justify-center relative transition-colors"
-              style={{ color: 'var(--p300)' }}
-            >
-              <Icon size={20} />
-              {dot && (
-                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
-                  style={{ background: 'var(--danger)', border: '1.5px solid var(--p800)' }} />
-              )}
-            </button>
-          ))}
+          <button className="w-9 h-9 rounded-[10px] flex items-center justify-center relative" style={{ color: 'var(--p300)' }}>
+            <Bell size={20} />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
+              style={{ background: 'var(--danger)', border: '1.5px solid var(--p800)' }} />
+          </button>
+          <button className="w-9 h-9 rounded-[10px] flex items-center justify-center" style={{ color: 'var(--p300)' }}>
+            <Gift size={20} />
+          </button>
+          <Link href="/account" className="w-9 h-9 rounded-[10px] flex items-center justify-center relative"
+            style={{ color: user ? 'var(--p400)' : 'var(--p300)' }}>
+            <User size={20} />
+            {user && (
+              <span className="absolute bottom-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
+                style={{ background: 'var(--p500)', border: '1.5px solid var(--p800)' }} />
+            )}
+          </Link>
         </div>
       </header>
 
-      {/* 티커 */}
       <div className="flex items-center gap-2 px-3 py-2 overflow-hidden" style={{ background: 'var(--p700)' }}>
         <span className="shrink-0 flex items-center gap-1 text-white text-[11px] font-bold px-2 py-0.5 rounded"
           style={{ background: 'rgba(255,255,255,0.15)' }}>

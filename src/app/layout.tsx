@@ -5,6 +5,7 @@ import BottomNav from '@/components/shared/BottomNav'
 import TopTabBar from '@/components/shared/TopTabBar'
 import SosFloat from '@/components/shared/SosFloat'
 import AppHeader from '@/components/shared/AppHeader'
+import { AuthProvider } from '@/lib/auth/AuthContext'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
 
@@ -26,11 +27,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={geist.variable}>
       <body className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
-        <AppHeader />
-        <TopTabBar />
-        <main className="flex-1 pb-nav">{children}</main>
-        <SosFloat />
-        <BottomNav />
+        <AuthProvider>
+          <AppHeader />
+          <TopTabBar />
+          <main className="flex-1 pb-nav">{children}</main>
+          <SosFloat />
+          <BottomNav />
+        </AuthProvider>
       </body>
     </html>
   )
