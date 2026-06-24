@@ -2,16 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import { Cctv, Bell, AlertTriangle, MapPin, Megaphone } from 'lucide-react'
 import type { MapMarker } from '@/components/map/KakaoMap'
 
 const KakaoMap = dynamic(() => import('@/components/map/KakaoMap'), { ssr: false })
 
 type LayerKey = 'cctv' | 'bell' | 'report'
 
-const LAYER_LABELS: Record<LayerKey, string> = {
-  cctv:   '📷 CCTV',
-  bell:   '🔔 비상벨',
-  report: '⚠️ 제보',
+const LAYER_LABELS: Record<LayerKey, React.ReactNode> = {
+  cctv:   <><Cctv size={13} /> CCTV</>,
+  bell:   <><Bell size={13} /> 비상벨</>,
+  report: <><AlertTriangle size={13} /> 제보</>,
 }
 
 export default function MapView() {
@@ -91,9 +92,9 @@ export default function MapView() {
       {/* 내 위치 버튼 */}
       <button
         onClick={goToMyLocation}
-        className="absolute bottom-4 right-4 z-10 bg-white rounded-full w-11 h-11 shadow-lg flex items-center justify-center text-xl border border-green-100"
+        className="absolute bottom-4 right-4 z-10 bg-white rounded-full w-11 h-11 shadow-lg flex items-center justify-center border border-green-100"
       >
-        📍
+        <MapPin size={20} className="text-[#16a34a]" />
       </button>
 
       {/* 제보하기 FAB */}
@@ -101,7 +102,7 @@ export default function MapView() {
         href="/community/new"
         className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-[#16a34a] text-white px-5 py-3 rounded-full font-semibold shadow-lg flex items-center gap-2"
       >
-        <span>📢</span> 이 위치 제보하기
+        <Megaphone size={16} /> 이 위치 제보하기
       </a>
     </div>
   )

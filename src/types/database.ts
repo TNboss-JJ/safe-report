@@ -54,7 +54,7 @@ export interface ReportInsert {
   source_note?: string | null
 }
 
-export interface CommentRow {
+export interface ReportCommentRow {
   id: string
   report_id: string
   author_id: string | null
@@ -90,9 +90,9 @@ export interface Database {
         Insert: { report_id: string; user_id: string }
         Update: Record<string, never>
       }
-      comments: {
-        Row: CommentRow
-        Insert: Omit<CommentRow, 'id' | 'created_at'>
+      report_comments: {
+        Row: ReportCommentRow
+        Insert: Omit<ReportCommentRow, 'id' | 'created_at'>
         Update: Record<string, never>
       }
       point_logs: {

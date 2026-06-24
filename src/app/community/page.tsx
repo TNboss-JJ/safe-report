@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Megaphone, MapPin, Eye, CheckCircle } from 'lucide-react'
 import { REPORT_TYPES } from '@/constants'
 
 // 임시 목업 데이터 (Supabase 연결 후 교체)
@@ -72,9 +73,9 @@ export default function CommunityPage() {
         <h1 className="text-lg font-bold text-gray-900">시민 제보</h1>
         <Link
           href="/community/new"
-          className="bg-[#16a34a] text-white text-sm font-semibold px-4 py-2 rounded-full"
+          className="bg-[#16a34a] text-white text-sm font-semibold px-4 py-2 rounded-full flex items-center gap-1"
         >
-          + 제보하기
+          <Megaphone size={14} /> 제보하기
         </Link>
       </div>
 
@@ -105,16 +106,16 @@ export default function CommunityPage() {
                   {getTypeLabel(report.report_type)}
                 </span>
                 {report.is_verified && (
-                  <span className="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full ml-auto shrink-0">
-                    ✓ 목격확인
+                  <span className="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full ml-auto shrink-0 flex items-center gap-1">
+                    <CheckCircle size={11} /> 목격확인
                   </span>
                 )}
               </div>
               <h2 className="font-semibold text-gray-900 mb-1">{report.title}</h2>
               <p className="text-sm text-gray-500 line-clamp-2 mb-3">{report.body}</p>
               <div className="flex items-center gap-3 text-xs text-gray-400">
-                <span>📍 {report.address}</span>
-                <span>👁 {report.verify_count}명 목격</span>
+                <span className="flex items-center gap-1"><MapPin size={11} /> {report.address}</span>
+                <span className="flex items-center gap-1"><Eye size={11} /> {report.verify_count}명 목격</span>
                 <span className="ml-auto">{timeAgo(report.created_at)}</span>
               </div>
             </div>

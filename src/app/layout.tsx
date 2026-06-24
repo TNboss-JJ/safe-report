@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 import './globals.css'
 import BottomNav from '@/components/shared/BottomNav'
+import { ShieldAlert } from 'lucide-react'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
 
@@ -23,8 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`${geist.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-[#f0fdf4]">
-        <header className="sticky top-0 z-40 h-14 flex items-center px-4 bg-[#052e16] shadow-md">
-          <span className="text-white font-bold text-lg tracking-tight">🛡️ 세이프리포트</span>
+        <header className="sticky top-0 z-40 h-14 flex items-center px-4 bg-[#052e16] shadow-md gap-2">
+          <ShieldAlert className="text-[#22c55e]" size={22} />
+          <span className="text-white font-bold text-lg tracking-tight">세이프리포트</span>
         </header>
 
         <main className="flex-1 pb-safe">{children}</main>

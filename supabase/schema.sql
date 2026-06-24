@@ -107,8 +107,8 @@ create trigger trg_verify_count
 after insert or delete on public.report_verifies
 for each row execute function update_verify_count();
 
--- ── comments ────────────────────────────────────────────────
-create table public.comments (
+-- ── report_comments ─────────────────────────────────────────
+create table public.report_comments (
   id           uuid        primary key default gen_random_uuid(),
   report_id    uuid        not null references public.reports(id) on delete cascade,
   author_id    uuid        references public.profiles(id) on delete set null,
@@ -117,10 +117,10 @@ create table public.comments (
   created_at   timestamptz not null default now()
 );
 
-alter table public.comments enable row level security;
+alter table public.report_comments enable row level security;
 
-create policy "댓글 조회" on public.comments for select using (true);
-create policy "로그인 댓글 작성" on public.comments
+create policy "댓글 조회" on public.report_comments for select using (true);
+create policy "로그인 댓글 작성" on public.report_comments
   for insert with check (auth.uid() is not null);
 
 -- ── cctv_cache (공공데이터 동기화 캐시) ─────────────────────
