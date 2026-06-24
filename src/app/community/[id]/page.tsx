@@ -21,8 +21,9 @@ function timeAgo(iso: string) {
   return `${Math.floor(h / 24)}일 전`
 }
 
-export default function ReportDetailPage({ params }: { params: { id: string } }) {
-  const report = MOCK_REPORTS.find(r => r.id === params.id)
+export default async function ReportDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const report = MOCK_REPORTS.find(r => r.id === id)
 
   if (!report) {
     return (
