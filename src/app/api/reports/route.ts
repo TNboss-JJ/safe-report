@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabase } from '@/lib/api/supabase-server'
+import { createServerSupabase, createServiceClient } from '@/lib/api/supabase-server'
 
 export async function GET(req: NextRequest) {
   const supabase = await createServerSupabase()
@@ -53,8 +53,9 @@ export async function POST(req: NextRequest) {
   if (error || !data) return NextResponse.json({ error: error?.message ?? '오류' }, { status: 500 })
 
   // 포인트 적립
+  const svc = await createServiceClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabase as any).from('point_logs').insert({
+  await (svc as any).from('point_logs').insert({
     user_id: user.id,
     delta: 50,
     reason: 'report',

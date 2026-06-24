@@ -1,7 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { ShieldCheck, LogOut, Calendar, Megaphone, Star, Link as LinkIcon } from 'lucide-react'
 import { useAuth } from '@/lib/auth/AuthContext'
+import { createBrowserClient } from '@supabase/ssr'
 
 const EARN_ITEMS = [
   { Icon: Calendar, name: '매일 출석', sub: '하루 1회', pts: '+10P' },
@@ -31,13 +33,24 @@ function GoogleIcon() {
 
 export default function AccountPage() {
   const { user, signInWithKakao, signInWithGoogle, signOut } = useAuth()
+  const [points, setPoints] = useState(0)
+
+  useEffect(() => {
+    if (!user) return
+    const sb = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+    sb.from('sr_profiles').select('points').eq('id', user.id).maybeSingle()
+      .then(({ data }) => { if (data) setPoints(data.points ?? 0) })
+  }, [user])
 
   if (user) {
     return (
       <div className="max-w-lg mx-auto px-4 py-5 space-y-4">
         <div className="rounded-2xl p-5 text-white" style={{ background: 'linear-gradient(135deg, var(--p700), var(--p500))', boxShadow: '0 6px 22px rgba(22,163,74,0.3)' }}>
           <p className="text-[12px] opacity-80 mb-1">내 포인트</p>
-          <p className="text-[38px] font-black mb-1">0 P</p>
+          <p className="text-[38px] font-black mb-1">{points} P</p>
           <p className="text-[13px] opacity-75">{user.email ?? '사용자'}</p>
         </div>
 
