@@ -82,13 +82,43 @@ interface ApiResponse<T> {
 
 /**
  * 전국 방범 CCTV 위치 조회
- * data.go.kr/data/15075538
+ * apis.data.go.kr/1741000/cctv_info
  */
 export async function fetchCCTVData(params?: { page?: number; perPage?: number }) {
-  return publicDataFetch<ApiResponse<CCTVData>>(
-    `${BASE_URL}/15075538/v1/uddi:58a5b834-0e22-4af4-948b-b7dddf558168_201905231504`,
-    params,
+  const numOfRows = params?.perPage ?? 1000
+  const pageNo = params?.page ?? 1
+
+  const searchParams = new URLSearchParams({
+    serviceKey: API_KEY,
+    pageNo: String(pageNo),
+    numOfRows: String(numOfRows),
+    type: 'json',
+  })
+
+  const res = await fetch(
+    `https://apis.data.go.kr/1741000/cctv_info?${searchParams}`,
+    { next: { revalidate: 60 * 60 * 24 } },
   )
+  if (!res.ok) throw new Error(`CCTV API 오류: ${res.status}`)
+
+  const json = await res.json()
+
+  // apis.data.go.kr 응답 형식: { response: { body: { items: [...], totalCount } } }
+  // 또는 직접 배열인 경우도 있음
+  const items: CCTVData[] =
+    json?.response?.body?.items ??
+    json?.items ??
+    json?.data ??
+    []
+
+  return {
+    data: Array.isArray(items) ? items : Object.values(items),
+    totalCount: json?.response?.body?.totalCount ?? items.length,
+    currentCount: items.length,
+    page: pageNo,
+    perPage: numOfRows,
+    matchCount: items.length,
+  } as ApiResponse<CCTVData>
 }
 
 /**
