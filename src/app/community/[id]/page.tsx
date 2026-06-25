@@ -1,7 +1,8 @@
-import { ArrowLeft, MapPin, Eye, MessageCircle, AlertTriangle, CheckCircle, Flame, ShieldAlert } from 'lucide-react'
+import { ArrowLeft, MapPin, Eye, AlertTriangle, CheckCircle, Flame, ShieldAlert } from 'lucide-react'
 import Link from 'next/link'
 import { createServerSupabase } from '@/lib/api/supabase-server'
 import VerifyButton from './VerifyButton'
+import CommentSection from './CommentSection'
 import type { ReportRow } from '@/types/database'
 
 const RISK_STYLES: Record<string, { bg: string; color: string; label: string }> = {
@@ -108,17 +109,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ i
           </button>
         </div>
 
-        <div className="mt-5 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
-          <h2 className="text-[16px] font-black mb-3 flex items-center gap-2" style={{ color: 'var(--text)' }}>
-            <MessageCircle size={16} /> 댓글
-          </h2>
-          <div className="rounded-2xl p-4 text-center" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
-            <p className="text-[13px]" style={{ color: 'var(--text3)' }}>댓글을 남기려면 로그인이 필요해요</p>
-            <Link href="/account" className="inline-block mt-2 text-[13px] font-bold" style={{ color: 'var(--p600)' }}>
-              로그인하기 →
-            </Link>
-          </div>
-        </div>
+        <CommentSection reportId={report.id} />
       </div>
     </div>
   )

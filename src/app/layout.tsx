@@ -6,6 +6,7 @@ import TopTabBar from '@/components/shared/TopTabBar'
 import SosFloat from '@/components/shared/SosFloat'
 import AppHeader from '@/components/shared/AppHeader'
 import { AuthProvider } from '@/lib/auth/AuthContext'
+import SwRegister from '@/components/shared/SwRegister'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="flex-1 pb-nav">{children}</main>
           <SosFloat />
           <BottomNav />
+          <SwRegister />
         </AuthProvider>
       </body>
     </html>

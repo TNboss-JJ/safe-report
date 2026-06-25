@@ -35,6 +35,7 @@ export default function AccountPage() {
   const { user, signInWithKakao, signInWithGoogle, signOut } = useAuth()
   const [points, setPoints] = useState(0)
   const [checkinDone, setCheckinDone] = useState(false)
+  const [myReports, setMyReports] = useState<Array<{ id: string; title: string; risk_level: string; verify_count: number; created_at: string }>>([])
 
   async function handleCheckin() {
     const res = await fetch('/api/checkin', { method: 'POST' })
@@ -55,6 +56,7 @@ export default function AccountPage() {
     )
     sb.from('sr_profiles').select('points').eq('id', user.id).maybeSingle()
       .then(({ data }) => { if (data) setPoints(data.points ?? 0) })
+    fetch('/api/my-reports').then(r => r.json()).then(d => setMyReports(d.reports ?? []))
   }, [user])
 
   if (user) {
@@ -105,6 +107,27 @@ export default function AccountPage() {
             </div>
           ))}
         </div>
+
+        {myReports.length > 0 && (
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm border" style={{ borderColor: 'var(--border)' }}>
+            <p className="px-4 py-3 text-[13px] font-black border-b" style={{ color: 'var(--text)', borderColor: 'var(--border)' }}>내 제보 내역</p>
+            {myReports.slice(0, 5).map((r, i) => (
+              <a key={r.id} href={`/community/${r.id}`}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 active:bg-gray-100"
+                style={{ borderBottom: i < Math.min(myReports.length, 5) - 1 ? '1px solid var(--border)' : 'none', textDecoration: 'none' }}>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[13px] font-bold truncate" style={{ color: 'var(--text)' }}>{r.title}</p>
+                  <p className="text-[11px] mt-0.5" style={{ color: 'var(--text3)' }}>목격 {r.verify_count} · {new Date(r.created_at).toLocaleDateString('ko-KR')}</p>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg shrink-0"
+                  style={{ background: r.risk_level === 'high' ? 'var(--danger-bg)' : r.risk_level === 'medium' ? 'var(--warn-bg)' : '#f3f4f6',
+                           color: r.risk_level === 'high' ? 'var(--danger)' : r.risk_level === 'medium' ? 'var(--warn)' : '#6b7280' }}>
+                  {r.risk_level === 'high' ? '위험' : r.risk_level === 'medium' ? '주의' : r.risk_level === 'critical' ? '긴급' : '낮음'}
+                </span>
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     )
   }

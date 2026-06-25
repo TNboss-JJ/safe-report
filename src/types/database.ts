@@ -95,6 +95,18 @@ export interface Database {
         Insert: Omit<ReportCommentRow, 'id' | 'created_at'>
         Update: Record<string, never>
       }
+      sr_comments: {
+        Row: ReportCommentRow
+        Insert: Omit<ReportCommentRow, 'id' | 'created_at'>
+        Update: Record<string, never>
+        Relationships: []
+      }
+      sr_profiles: {
+        Row: ProfileRow
+        Insert: Partial<ProfileRow> & { id: string }
+        Update: Partial<ProfileRow>
+        Relationships: []
+      }
       point_logs: {
         Row: { id: string; user_id: string; delta: number; reason: string; ref_id: string | null; created_at: string }
         Insert: PointLogInsert
